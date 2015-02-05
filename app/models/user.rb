@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
   def self.find_or_create_from_auth_hash(auth_hash)
-  	find_by_auth_hash(auth_hash) ||creat_from_auth_hash(auth_hash)
+  	find_by_auth_hash(auth_hash) || create_from_auth_hash(auth_hash)
   end
 
   def self.find_by_auth_hash(auth_hash)
@@ -15,12 +15,12 @@ class User < ActiveRecord::Base
   		).first
   end
 
-  def create_from_auth_hash(auth_hash)
+  def self.create_from_auth_hash(auth_hash)
   	create(
-  		provide: auth_hash.provider,
+  		provider: auth_hash.provider,
   		uid: auth_hash.uid,
-  		email: auth_hash.email,
-  		name: auth_hash.name,
+  		email: auth_hash.info.email,
+  		name: auth_hash.info.name,
   		oauth_token: auth_hash.credentials.token,
   		oauth_expires_at: Time.at(auth_hash.credentials.expires_at)
   	)
